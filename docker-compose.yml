@@ -1,0 +1,50 @@
+# ==============================================================================
+# Visokio Omniscope (BYOL, .lic-only)
+# Official Docker Compose example
+# ==============================================================================
+# Runs Omniscope in Bring-Your-Own-License mode.
+# - Mounts a BYOL .lic file into the container
+# - Generates a one-time admin password on first boot (printed in logs)
+# - Persists configuration and projects in ./omniscope-server
+# ==============================================================================
+
+services:
+  omniscope:
+    platform: linux/amd64
+    image: "${OMNI_IMAGE:-visokio/omniscope:latest}"
+    container_name: omniscope
+
+    # -------------------------------------------------------------------------
+    # Networking
+    # -------------------------------------------------------------------------
+    ports:
+      - "8080:8080"
+      # - "8443:8443" # Optional HTTPS (enable if configured)
+
+    # -------------------------------------------------------------------------
+    # Persistent volumes
+    # -------------------------------------------------------------------------
+    # Mounts:
+    #   - ./omniscope-server -> persistent configuration and projects
+    #   - ./license/ -> directory containing your license file (any filename)
+    volumes:
+      - ./omniscope-server:/home/omniscope/omniscope-server
+      - ./license/:/home/omniscope/.visokioappdata/Visokio/Omniscope/licenses:ro
+
+    # -------------------------------------------------------------------------
+    # Environment (recommended)
+    # -------------------------------------------------------------------------
+    environment:
+      # Required for license identity (Compose: hostname is fine; override if needed)
+      CONTAINER_ID: "${HOSTNAME}"
+
+      # Use this ONLY if you want to force a new admin password recreation.
+      # OMNI_FORCE_CREATE_ADMIN_PWD: "true"
+
+    # Give the container a readable hostname (becomes $HOSTNAME inside)
+    hostname: my-omniscope-server
+
+    # -------------------------------------------------------------------------
+    # Restart policy
+    # -------------------------------------------------------------------------
+    restart: unless-stopped
