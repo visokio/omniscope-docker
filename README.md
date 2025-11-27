@@ -76,13 +76,29 @@ mkdir -p omniscope-server license
 cp /path/to/your.lic license/omniscope.lic
 chmod 600 license/omniscope.lic
 
-docker run -d --name omniscope   --restart unless-stopped   -p 8080:8080   -h my-omniscope-server   -v "$PWD/omniscope-server":/home/omniscope/omniscope-server   -v "$PWD/license/omniscope.lic":/home/omniscope/.visokioappdata/Visokio/Omniscope/licenses/omniscope.lic:ro   -e CONTAINER_ID="$(hostname)"   <repo>/omniscope:2026.1.22349
+# Choose the image tag:
+# - Local-only: use the locally built image `omniscope-local` (see build section above).
+# - Pushing/shared: use a versioned tag like `<repo>/omniscope:2026.1.22349`.
+docker run -d \
+  --name omniscope \
+  --hostname my-omniscope-server \
+  --restart unless-stopped \
+  -p 8080:8080 \
+  -e HOSTNAME=my-omniscope-server \
+  -e CONTAINER_ID=my-omniscope-server \
+  -v "$PWD/omniscope-server":/home/omniscope/omniscope-server \
+  -v "$PWD/license/omniscope.lic":/home/omniscope/.visokioappdata/Visokio/Omniscope/licenses/omniscope.lic:ro \
+  <repo>/omniscope:2026.1.22349
 ```
 
 Check logs:
 ```bash
-docker logs omniscope | grep "admin password"
+docker logs omniscope | grep -m1 -F "Admin password (save securely)"
 ```
+
+### Finding and storing the admin password
+- On first run Omniscope prints a admin password to stdout; fetch it with `docker logs omniscope | grep -m1 -F "Admin password (save securely)"` (or `docker compose logs omniscope | grep -m1 -F "Admin password (save securely)"` if using Compose).
+- Copy the password to a secure location (e.g., your team password manager) immediately; avoid leaving it in shell history or plaintext files.
 
 ---
 
