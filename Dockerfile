@@ -102,5 +102,5 @@ ENTRYPOINT ["/home/omniscope/entrypoint.sh"]
 #       /home/omniscope/.visokioappdata/Visokio/Omniscope/licenses
 #  - Mount config folder to:
 #       /home/omniscope/omniscope-server
-#  - On first start, Omniscope prints a one-time admin password in logs.
+#  - On first start, Omniscope prints a admin password in logs.
 # ----------------------------------------------------------------------------

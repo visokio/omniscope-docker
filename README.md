@@ -8,33 +8,41 @@ Public Dockerfiles and examples for Visokio Omniscope (Bring-Your-Own-License).
 - `docker-compose.yml` — example stack with required mounts and hostname.
 
 ---
-
 ## Build locally
 
-### 🔖 Important — Tag the Image With the Correct Omniscope Version
+### 🔖 Important — When to Tag the Image
 
-When you build the image, always tag it using the **exact Omniscope version** from the bundle URL you are using.
+Tagging with the Omniscope version is **only required when pushing the image to a registry** (Docker Hub, ECR, GitLab, etc.).  
+If you are running the image **locally**, tagging with a version is optional.
 
-For example, if your bundle URL contains:
+### Local build (no version tag required)
+```bash
+docker build -t omniscope-local .
+```
+
+### Publishing to a registry (use the correct Omniscope version)
+
+Find the version from the bundle URL, for example:
 
 ```
 .../2026-1/22349/Bundles/VisokioOmniscope-Linux.tgz
 ```
 
-Then your image **must** be tagged:
+This corresponds to:
 
 ```
 2026.1.22349
 ```
 
-### Example
+### Example (for pushing)
 ```bash
 # Build using the correct version tag
 docker build -t <repo>/omniscope:2026.1.22349 .
 
-# Optionally also tag as 'latest' within your repo
+# Optionally also tag as 'latest'
 docker tag <repo>/omniscope:2026.1.22349 <repo>/omniscope:latest
 ```
+
 
 ---
 
@@ -73,7 +81,7 @@ docker run -d --name omniscope   --restart unless-stopped   -p 8080:8080   -h my
 
 Check logs:
 ```bash
-docker logs omniscope | grep "One-time admin password"
+docker logs omniscope | grep "admin password"
 ```
 
 ---

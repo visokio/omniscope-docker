@@ -10,7 +10,7 @@
 #       - First boot (no /home/omniscope/omniscope-server/config.xml), or
 #       - OMNI_FORCE_CREATE_ADMIN_PWD=true
 #   - Autosetup uses:  -autosetup xxxx "<ADMIN_PASSWORD>"
-#   - Always prints the one-time admin password on first initialization.
+#   - Always prints the admin password on first initialization.
 #
 # Env:
 #   OMNI_FORCE_CREATE_ADMIN_PWD=true | false
@@ -84,7 +84,7 @@ STEP 3: Provide identity variables:
             - CONTAINER_ID -> metadata.uid
             - CLUSTER_ID   -> ConfigMap key (true cluster ID)
 
-STEP 4: Start the container and check logs for the one-time admin password.
+STEP 4: Start the container and check logs for the admin password.
 
 QUICK EXAMPLES
 
@@ -174,7 +174,7 @@ resolve_admin_password() {
       err "Failed to generate admin password."
       exit 1
     fi
-    log "Generated one-time admin password."
+    log "Generated admin password."
     return
   fi
 }
@@ -194,7 +194,7 @@ if [[ "${need_autosetup}" == "true" ]]; then
 
   log "Autosetup complete."
   log "=============================================================="
-  log " One-time admin password (save securely): ${OMNI_ADMIN_PASSWORD}"
+  log " admin password (save securely): ${OMNI_ADMIN_PASSWORD}"
   log "=============================================================="
 else
   log "Using existing configuration (no autosetup)."

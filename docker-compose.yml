@@ -4,7 +4,7 @@
 # ==============================================================================
 # Runs Omniscope in Bring-Your-Own-License mode.
 # - Mounts a BYOL .lic file into the container
-# - Generates a one-time admin password on first boot (printed in logs)
+# - Generates a admin password on first boot (printed in logs)
 # - Persists configuration and projects in ./omniscope-server
 # ==============================================================================
 
