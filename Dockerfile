@@ -10,8 +10,8 @@ FROM ubuntu:22.04
 # Build-time arguments
 # ----------------------------------------------------------------------------
 ARG ubuntu_ver_code_name=jammy
-ARG monetdb_ver=11.53.15
-ARG linux_bundle=https://storage.googleapis.com/builds.visokio.com/2026-1/22349/Bundles/VisokioOmniscope-Linux.tgz
+ARG monetdb_ver=11.55.1
+ARG linux_bundle=https://storage.googleapis.com/builds.visokio.com/2026-1/22370/Bundles/VisokioOmniscope-Linux.tgz
 
 # Noninteractive APT to avoid tzdata prompts, etc.
 ENV DEBIAN_FRONTEND=noninteractive
@@ -28,12 +28,25 @@ ENV OMNISCOPE_APPDATA_DIR=${OMNISCOPE_HOME}/.visokioappdata/Visokio/Omniscope
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
+      # Basic tools
       ca-certificates \
       gnupg \
       wget \
       fontconfig \
       lsb-release \
-      nano; \
+      nano \
+      # Python
+      python3 \
+      python3-pip \
+      python3-venv \
+      # R and Compilation Dependencies
+      r-base \
+      r-base-dev \
+      build-essential \
+      libcurl4-openssl-dev \
+      libssl-dev \
+      libxml2-dev \
+      zlib1g-dev; \
     rm -rf /var/lib/apt/lists/*
 
 # ----------------------------------------------------------------------------
