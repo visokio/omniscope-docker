@@ -10,8 +10,8 @@ FROM ubuntu:22.04
 # Build-time arguments
 # ----------------------------------------------------------------------------
 ARG ubuntu_ver_code_name=jammy
-ARG monetdb_ver=11.55.1
-ARG linux_bundle=https://storage.googleapis.com/builds.visokio.com/2026-1/22370/Bundles/VisokioOmniscope-Linux.tgz
+ARG monetdb_ver=11.55.3
+ARG linux_bundle=https://storage.googleapis.com/builds.visokio.com/2026-1/22427/Bundles/VisokioOmniscope-Linux.tgz
 
 # Noninteractive APT to avoid tzdata prompts, etc.
 ENV DEBIAN_FRONTEND=noninteractive
