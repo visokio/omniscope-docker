@@ -16,7 +16,6 @@
 #   OMNI_FORCE_CREATE_ADMIN_PWD=true | false
 #   OMNI_LICENSE_DIR                # optional override for license directory
 #   OMNI_KB_URL                     # optional override for KB link shown on errors
-#   OMNI_JVM_PARAMS                 # optional extra JVM flags appended last
 # ==============================================================================
 set -Eeuo pipefail
 
@@ -202,37 +201,7 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# 6) Build ADD_VM_PARS for the JVM
-# Source the base ADD_VM_PARS from omniscope-evo-headless.sh, then append
-# any extra flags from OMNI_JVM_PARAMS (e.g. -Domniscope.nodeType, -Xmx).
-# ------------------------------------------------------------------------------
-
-# Source the ADD_VM_PARS value from the headless script
-# shellcheck disable=SC1090
-eval "$(grep '^export ADD_VM_PARS=' "${OMNI_HOME}/omniscope-evo-headless.sh")"
-
-if [[ -n "${OMNI_JVM_PARAMS:-}" ]]; then
-  ADD_VM_PARS="${ADD_VM_PARS} ${OMNI_JVM_PARAMS}"
-  log "Extra JVM params: ${OMNI_JVM_PARAMS}"
-fi
-export ADD_VM_PARS
-
-# ------------------------------------------------------------------------------
-# 7) Start Omniscope (headless) — _launch.sh logic embedded here so that
-#    JAVA_VM_PARS is configurable and ADD_VM_PARS / OMNI_JVM_PARAMS are applied.
-#    Memory: override -XX:MaxRAMPercentage or use -Xmx via OMNI_JVM_PARAMS.
-#    JVM last-flag-wins means OMNI_JVM_PARAMS values take precedence.
+# 6) Start Omniscope (headless)
 # ------------------------------------------------------------------------------
 log "Starting Omniscope (headless)..."
-cd "${OMNI_HOME}"
-
-# Do not change
-JAVA_CMD=x64/bin/java
-
-JAVA_VM_PARS='-Xms64M -XX:MaxRAMPercentage=50.0 -Djava.locale.providers=COMPAT,CLDR,SPI --add-opens=java.desktop/java.awt=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED --add-opens=java.desktop/sun.swing=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --illegal-access=permit'
-
-# Do not change
-JAVA_CP='Main.jar:lib/*'
-DIR="$( cd "$( dirname "$0" )" && pwd )"
-cd "$DIR"
-exec "$JAVA_CMD" $JAVA_VM_PARS $ADD_VM_PARS -cp "$JAVA_CP" "com.visokio.ent.OmniscopeEvo"
+exec "${OMNI_HOME}/omniscope-evo-headless.sh"
