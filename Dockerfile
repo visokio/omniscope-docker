@@ -14,8 +14,11 @@ ARG monetdb_ver=11.55.3
 ARG linux_bundle=https://storage.googleapis.com/builds.visokio.com/2026-1/22427/Bundles/VisokioOmniscope-Linux.tgz
 
 # Noninteractive APT to avoid tzdata prompts, etc.
-ENV DEBIAN_FRONTEND=noninteractive
-
+# Set UTF-8 locale defaults (Ubuntu's C.UTF-8 is available without locale-gen).
+ENV DEBIAN_FRONTEND=noninteractive \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
+    
 # Base paths
 ENV OMNISCOPE_HOME=/home/omniscope
 ENV OMNISCOPE_APP_DIR=${OMNISCOPE_HOME}/visokio-omniscope
