@@ -1,24 +1,24 @@
 # ==============================================================================
 # Visokio Omniscope (BYOL, .lic-only)
-# Ubuntu 22.04 base with MonetDB and Omniscope headless server
+# Ubuntu 24.04 base with MonetDB and Omniscope headless server
 # Runs as non-root user "omniscope"
 # ==============================================================================
 
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 # ----------------------------------------------------------------------------
 # Build-time arguments
 # ----------------------------------------------------------------------------
-ARG ubuntu_ver_code_name=jammy
-ARG monetdb_ver=11.55.3
-ARG linux_bundle=https://storage.googleapis.com/builds.visokio.com/2026-1/22427/Bundles/VisokioOmniscope-Linux.tgz
+ARG ubuntu_ver_code_name=noble
+ARG monetdb_ver=11.55.5
+ARG linux_bundle=https://storage.googleapis.com/builds.visokio.com/2026-1/22451/Bundles/VisokioOmniscope-Linux.tgz
 
 # Noninteractive APT to avoid tzdata prompts, etc.
 # Set UTF-8 locale defaults (Ubuntu's C.UTF-8 is available without locale-gen).
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8
-    
+
 # Base paths
 ENV OMNISCOPE_HOME=/home/omniscope
 ENV OMNISCOPE_APP_DIR=${OMNISCOPE_HOME}/visokio-omniscope
@@ -30,6 +30,10 @@ ENV OMNISCOPE_APPDATA_DIR=${OMNISCOPE_HOME}/.visokioappdata/Visokio/Omniscope
 # ----------------------------------------------------------------------------
 RUN set -eux; \
     apt-get update; \
+    apt-get upgrade -y; \
+    apt-get dist-upgrade -y; \
+    apt-get autoremove -y; \
+    apt-get clean; \
     apt-get install -y --no-install-recommends \
       # Basic tools
       ca-certificates \
@@ -53,7 +57,7 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*
 
 # ----------------------------------------------------------------------------
-# MonetDB (Ubuntu 22.04 "jammy") — version locked
+# MonetDB (Ubuntu 24.04 "noble") — version locked
 # ----------------------------------------------------------------------------
 RUN set -eux; \
     mkdir -p /usr/share/keyrings; \
