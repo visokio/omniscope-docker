@@ -10,8 +10,8 @@ FROM ubuntu:24.04
 # Build-time arguments
 # ----------------------------------------------------------------------------
 ARG ubuntu_ver_code_name=noble
-ARG monetdb_ver=11.55.5
-ARG linux_bundle=https://storage.googleapis.com/builds.visokio.com/2026-1/22451/Bundles/VisokioOmniscope-Linux.tgz
+ARG monetdb_ver=11.53.15
+ARG linux_bundle=https://storage.googleapis.com/builds.visokio.com/2026-1/22472/Bundles/VisokioOmniscope-Linux.tgz
 
 # Noninteractive APT to avoid tzdata prompts, etc.
 # Set UTF-8 locale defaults (Ubuntu's C.UTF-8 is available without locale-gen).
@@ -66,7 +66,13 @@ RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
       monetdb5-sql=${monetdb_ver} \
-      monetdb-client=${monetdb_ver}; \
+      monetdb-sql=${monetdb_ver} \
+      monetdb-server=${monetdb_ver} \
+      monetdb-client=${monetdb_ver} \
+      libmonetdb30=${monetdb_ver} \
+      libmonetdb-client28=${monetdb_ver} \
+      libmonetdb-stream28=${monetdb_ver} \
+      libmonetdb-mutils=${monetdb_ver}; \
     rm -rf /var/lib/apt/lists/*
 
 # ----------------------------------------------------------------------------
